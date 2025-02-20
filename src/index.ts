@@ -47,6 +47,33 @@ async function processTransaction(signature: string): Promise<void> {
   // Check rug check
   const isRugCheckPassed = await getRugCheckConfirmed(data.tokenMint);
   if (!isRugCheckPassed) {
+    (async () => {
+      // const TelegramBot = require('node-telegram-bot-api');
+      // const token = '7788362039:AAFQga5lRzUZnxWuXveTo6KC589sjMfC28Q'; // Replace with your actual bot token
+      // const chatId = '6592532126'; // Replace with the chat ID of the user
+  
+      // const bot = new TelegramBot(token, { polling: true });
+      // bot.sendMessage(chatId, tokenName);
+      const response = await fetch('https://mainnet.helius-rpc.com/?api-key=a211723c-fa94-4c50-b067-4d6d7eab836c', {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              "jsonrpc": "2.0",
+              "id": "text",
+              "method": "getAsset",
+              "params": { id: data.tokenMint}
+          }),
+      });
+      const datas = await response.json();
+      console.log("Don't Buy");
+      console.log(`name = ${datas.result.content.metadata.name}`);
+      console.log(`symbol = ${datas.result.content.metadata.symbol}`);
+      // console.log("👽 GMGN: https://gmgn.ai/sol/token/" + tokenMint);
+      // bot.sendMessage(chatId,`Don't Buy\nname = ${datas.result.content.metadata.name}\nsymbol = ${datas.result.content.metadata.symbol}\n👽 GMGN = https://gmgn.ai/sol/token/${data.tokenMint}`);
+    })();
+    console.log("👽 GMGN: https://gmgn.ai/sol/token/" + data.tokenMint);
     console.log("🚫 Rug Check not passed! Transaction aborted.");
     console.log("🟢 Resuming looking for new tokens...\n");
     return;
@@ -60,6 +87,33 @@ async function processTransaction(signature: string): Promise<void> {
     return;
   }
 
+  (async () => {
+    // const TelegramBot = require('node-telegram-bot-api');
+    // const token = '7788362039:AAFQga5lRzUZnxWuXveTo6KC589sjMfC28Q'; // Replace with your actual bot token
+    // const chatId = '6592532126'; // Replace with the chat ID of the user
+
+    // const bot = new TelegramBot(token, { polling: true });
+    // bot.sendMessage(chatId, tokenName);
+    const response = await fetch('https://mainnet.helius-rpc.com/?api-key=a211723c-fa94-4c50-b067-4d6d7eab836c', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "jsonrpc": "2.0",
+            "id": "text",
+            "method": "getAsset",
+            "params": { id: data.tokenMint}
+        }),
+    });
+    const datas = await response.json();
+    console.log("Strong Buy");
+    console.log(`name = ${datas.result.content.metadata.name}`);
+    console.log(`symbol = ${datas.result.content.metadata.symbol}`);
+    // console.log("👽 GMGN: https://gmgn.ai/sol/token/" + tokenMint);
+    // bot.sendMessage(chatId,`Strong Buy\nname = ${datas.result.content.metadata.name}\nsymbol = ${datas.result.content.metadata.symbol}\n👽 GMGN = https://gmgn.ai/sol/token/${data.tokenMint}`);
+  })();
+
   // Ouput logs
   console.log("Token found");
   console.log("👽 GMGN: https://gmgn.ai/sol/token/" + data.tokenMint);
@@ -72,26 +126,28 @@ async function processTransaction(signature: string): Promise<void> {
     return;
   }
 
-  // Add initial delay before first buy
-  await new Promise((resolve) => setTimeout(resolve, config.tx.swap_tx_initial_delay));
+  // console.log("TOKEN BUY 🟢 Successfully !!!");
 
-  // Create Swap transaction
-  const tx = await createSwapTransaction(data.solMint, data.tokenMint);
-  if (!tx) {
-    console.log("⛔ Transaction aborted.");
-    console.log("🟢 Resuming looking for new tokens...\n");
-    return;
-  }
+  // // Add initial delay before first buy
+  // await new Promise((resolve) => setTimeout(resolve, config.tx.swap_tx_initial_delay));
 
-  // Output logs
-  console.log("🚀 Swapping SOL for Token.");
-  console.log("Swap Transaction: ", "https://solscan.io/tx/" + tx);
+  // // Create Swap transaction
+  // const tx = await createSwapTransaction(data.solMint, data.tokenMint);
+  // if (!tx) {
+  //   console.log("⛔ Transaction aborted.");
+  //   console.log("🟢 Resuming looking for new tokens...\n");
+  //   return;
+  // }
 
-  // Fetch and store the transaction for tracking purposes
-  const saveConfirmation = await fetchAndSaveSwapDetails(tx);
-  if (!saveConfirmation) {
-    console.log("❌ Warning: Transaction not saved for tracking! Track Manually!");
-  }
+  // // Output logs
+  // console.log("🚀 Swapping SOL for Token.");
+  // console.log("Swap Transaction: ", "https://solscan.io/tx/" + tx);
+
+  // // Fetch and store the transaction for tracking purposes
+  // const saveConfirmation = await fetchAndSaveSwapDetails(tx);
+  // if (!saveConfirmation) {
+  //   console.log("❌ Warning: Transaction not saved for tracking! Track Manually!");
+  // }
 }
 
 // Websocket Handler for listening to the Solana logSubscribe method

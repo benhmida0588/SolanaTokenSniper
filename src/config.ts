@@ -83,9 +83,9 @@ export const config = {
     allow_freeze_authority: false, // The freeze authority is the address that can freeze token transfers, effectively locking up funds. Strongly Advised to set to false
     allow_rugged: false,
     // Critical
-    allow_mutable: false,
-    block_returning_token_names: true,
-    block_returning_token_creators: true,
+    allow_mutable: true,
+    block_returning_token_names: false,
+    block_returning_token_creators: false,
     block_symbols: ["XXX"],
     block_names: ["XXX"],
     allow_insider_topholders: false, // Allow inseder accounts to be part of the topholders

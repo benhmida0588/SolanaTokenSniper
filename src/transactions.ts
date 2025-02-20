@@ -120,7 +120,8 @@ export async function fetchTransactionDetails(signature: string): Promise<MintsD
       retryCount++;
 
       if (retryCount < maxRetries) {
-        const delay = Math.min(4000 * Math.pow(1.5, retryCount), 15000);
+        //const delay = Math.min(4000 * Math.pow(1.5, retryCount), 15000);
+        const delay = 2000;
         console.log(`Waiting ${delay / 1000} seconds before next attempt...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
@@ -334,6 +335,7 @@ export async function getRugCheckConfirmed(tokenMint: string): Promise<boolean> 
   if (!rugResponse.data) return false;
 
   if (config.rug_check.verbose_log && config.rug_check.verbose_log === true) {
+    console.log("test 001");
     console.log(rugResponse.data);
   }
 
@@ -365,6 +367,8 @@ export async function getRugCheckConfirmed(tokenMint: string): Promise<boolean> 
           level: "good",
         },
       ];
+
+  console.log("Token Name : ",tokenName);
 
   // Update topholders if liquidity pools are excluded
   if (config.rug_check.exclude_lp_from_topholders) {
@@ -451,22 +455,22 @@ export async function getRugCheckConfirmed(tokenMint: string): Promise<boolean> 
   ];
 
   // If tracking duplicate tokens is enabled
-  if (config.rug_check.block_returning_token_names || config.rug_check.block_returning_token_creators) {
-    // Get duplicates based on token min and creator
-    const duplicate = await selectTokenByNameAndCreator(tokenName, tokenCreator);
-
-    // Verify if duplicate token or creator was returned
-    if (duplicate.length !== 0) {
-      if (config.rug_check.block_returning_token_names && duplicate.some((token) => token.name === tokenName)) {
-        console.log("🚫 Token with this name was already created");
-        return false;
-      }
-      if (config.rug_check.block_returning_token_creators && duplicate.some((token) => token.creator === tokenCreator)) {
-        console.log("🚫 Token from this creator was already created");
-        return false;
-      }
-    }
-  }
+  // if (config.rug_check.block_returning_token_names || config.rug_check.block_returning_token_creators) {
+  //   // Get duplicates based on token min and creator
+  //   const duplicate = await selectTokenByNameAndCreator(tokenName, tokenCreator);
+    
+  //   // Verify if duplicate token or creator was returned
+  //   if (duplicate.length !== 0) {
+  //     if (config.rug_check.block_returning_token_names && duplicate.some((token) => token.name === tokenName)) {
+  //       console.log("🚫 Token with this name was already created");
+  //       return false;
+  //     }
+  //     if (config.rug_check.block_returning_token_creators && duplicate.some((token) => token.creator === tokenCreator)) {
+  //       console.log("🚫 Token from this creator was already created");
+  //       return false;
+  //     }
+  //   }
+  // }
 
   // Create new token record
   const newToken: NewTokenRecord = {
